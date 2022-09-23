@@ -16,7 +16,7 @@ setup(
     'torchvision'
   ],
   install_requires=[
-    'torch>=1.10',
+    'torch>=1.12',
     'torchvision'
   ],
   setup_requires=[

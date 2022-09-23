@@ -1,29 +1,24 @@
 import torch.nn as nn
-import torchvision.models as models
+from model_dicts import *
 
 
 class ResNet(nn.Module):
-    def __init__(self, feature_ext, classes, pretrain):
+    def __init__(self, feature_ext, classes, weight):
         super(ResNet, self).__init__()
-        self.resnet_dict = {"resnet18": models.resnet18(pretrained=pretrain),
-                            "resnet34": models.resnet34(pretrained=pretrain),
-                            "resnet50": models.resnet50(pretrained=pretrain),
-                            "resnet101": models.resnet101(pretrained=pretrain),
-                            "resnet152": models.resnet152(pretrained=pretrain),
-                            "resnext50_32x4d": models.resnext50_32x4d(pretrained=pretrain),
-                            "resnext101_32x8d": models.resnext101_32x8d(pretrained=pretrain),
-                            "wide_resnet50_2": models.wide_resnet50_2(pretrained=pretrain),
-                            "wide_resnet101_2": models.wide_resnet101_2(pretrained=pretrain)}
+        self.resnet_dict = resnet_dict
+        self.weights_dict = weights_dict
 
-        resnet = self._get_submodel(feature_ext)
+        resnet = self._get_submodel(feature_ext, weight)
         self.features = nn.Sequential(*list(resnet.children())[:-1])
         self.linear = nn.Linear(resnet.fc.in_features, classes)
 
-    def _get_submodel(self, feature_extractor):
+    def _get_submodel(self, feature_extractor, pretrained_weight):
         try:
             model = self.resnet_dict[feature_extractor]
+            weights = self.weights_dict[pretrained_weight]
+            submodel = model(weights=weights)
             print("Feature extractor:", feature_extractor)
-            return model
+            return submodel
         except:
             raise ("Invalid model name. Check the config file and pass one of: resnet~, resnext~ or wide_resnet~.")
 
@@ -31,6 +26,33 @@ class ResNet(nn.Module):
         h = self.features(x)
         h = self.linear(h.squeeze())
         return h
+
+
+class VisionTransformer(nn.Module):
+    def __init__(self, feature_ext, classes, weight):
+        super(VisionTransformer, self).__init__()
+        self.visionTransformer_dict = visionTransformer_dict
+        self.weights_dict = weights_dict
+
+        vit = self._get_submodel(feature_ext, weight)
+        self.features = nn.Sequential(*list(vit.children())[:-1])
+        self.linear = nn.Linear(vit.head[1].in_features, classes)
+
+    def _get_submodel(self, feature_extractor, pretrained_weight):
+        try:
+            model = self.visionTransformer_dict[feature_extractor]
+            weights = self.weights_dict[pretrained_weight]
+            submodel = model(weights=weights)
+            print("Feature extractor:", feature_extractor)
+            return submodel
+        except:
+            raise ("Invalid model name. Check the config file and pass one of: resnet~, resnext~ or wide_resnet~.")
+
+    def forward(self, x):
+        h = self.features(x)
+        ##h = self.linear(h.squeeze())
+        return h
+
 
 
 class MobileNet(nn.Module):
@@ -54,3 +76,8 @@ class MobileNet(nn.Module):
     def forward(self, x):
         h = self.mobilenet(x)
         return h
+
+if __name__ == "__main__":
+    model = VisionTransformer("vit_b_16", 4, "random")
+    #model = ResNet("resnet18", 4, "random")
+    print(model)
