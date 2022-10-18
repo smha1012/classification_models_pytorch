@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from model_dicts import *
+from .model_dicts import *
 
 
 class ResNet(nn.Module):
