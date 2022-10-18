@@ -3,9 +3,9 @@ from setuptools import setup, find_packages
 setup(
   name = 'classification_models_pytorch',
   packages = find_packages(exclude=['examples']),
-  version = '0.0.1',
+  version = '0.0.2',
   license='MIT',
-  description = 'Classification_models_pytorch',
+  description = 'classification_models_pytorch',
   long_description_content_type = 'text/markdown',
   author = 'Seungmin Ha & Saerom Park',
   author_email = 'smha@promedius.ai',
