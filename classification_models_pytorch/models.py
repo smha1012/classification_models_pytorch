@@ -21,7 +21,7 @@ class ResNet(nn.Module):
             print("Feature extractor:", feature_extractor)
             return submodel
         except:
-            raise ("Invalid model name. Check the config file and pass one of: resnet~, resnext~ or wide_resnet~.")
+            raise ("Invalid model name. Check the config file and pass one of: resnet18, resnet34, resnet50s.")
 
     def forward(self, x):
         h = self.features(x)
@@ -70,7 +70,7 @@ class EfficientNet(nn.Module):
             print("Feature extractor:", feature_extractor)
             return submodel
         except:
-            raise ("Invalid model name. Check the config file and pass one of: resnet~, resnext~ or wide_resnet~.")
+            raise ("Invalid model name. Check the config file and pass one of: efficientnet_b0~7, efficientnet_v2_~.")
 
     def forward(self, x):
         h = self.efficientnet(x)
@@ -94,7 +94,7 @@ class VisionTransformer(nn.Module):
             print("Feature extractor:", feature_extractor)
             return submodel
         except:
-            raise ("Invalid model name. Check the config file and pass one of: resnet~, resnext~ or wide_resnet~.")
+            raise ("Invalid model name. Check the config file and pass one of: vit_b~, vit_l~, vit_h_14.")
 
     def forward(self, x):
         h = self.vit(x)
@@ -118,7 +118,7 @@ class SwinTransformer(nn.Module):
             print("Feature extractor:", feature_extractor)
             return submodel
         except:
-            raise ("Invalid model name. Check the config file and pass one of: resnet~, resnext~ or wide_resnet~.")
+            raise ("Invalid model name. Check the config file and pass one of: swin_t, swin_s, swin_b.")
 
     def forward(self, x):
         h = self.swint(x)
